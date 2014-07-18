@@ -1,0 +1,93 @@
+##################
+Centreon Profiling
+##################
+
+This file describe how to build and install Centreon Profiling.
+
+*************
+Prerequisites
+*************
+
+To build Centreon Profiling, you will need the following external
+dependencies:
+
+* a C++ compilation environment
+* CMake **(>= 2.8)**, a cross-platform build system
+* Centreon Clib headers, a common C++ library.
+* Centreon Engine **(>= 1.3)** headers, a monitoring engine.
+
+This program is compatible only with Unix-like platforms (Linux,
+FreeBSD, Solaris, ...).
+
+You can follow this `documentation <http://documentation.centreon.com/docs/centreon-engine/en/latest/installation/index.html>`_
+to install these dependencies.
+
+*****
+Build
+*****
+
+Configuration
+=============
+
+At the root of the project directory you'll find a build directory
+which holds build scripts. Generate the Makefile by running the
+following command ::
+
+  $ cd /path_to_centreon_profiling/build
+
+Your Centreon Profiling can be tweaked to your particular needs using CMake's
+variable system. Variables can be set like this ::
+
+  $ cmake -D<variable1>=<value1> [-D<variable2>=<value2>] .
+
+Here's the list of variables available and their description:
+
+===============================  =================================================== ======================
+Variable                         Description                                         Default value
+===============================  =================================================== ======================
+WITH_CENTREON_CLIB_INCLUDE_DIR   Set the directory path of centreon-clib include.    auto detection
+WITH_CENTREON_ENGINE_INCLUDE_DIR Set the directory path of centreon-engine include.  auto detection
+WITH_PACKAGE_RPM                 Create RPM package.                                 OFF
+WITH_PREFIX                      Base directory for installation.                    ``/usr/local``
+                                 If other prefixes are expressed as relative
+                                 paths, they are relative to this path.
+WITH_PREFIX_BIN                  Define specific directory for binary.               ``${WITH_PREFIX}/bin``
+================================ =================================================== ======================
+
+Example for Nagios ::
+
+  $ cmake -DWITH_PREFIX_BIN=/usr/local/nagios/bin .
+
+Example for Centreon-Engine ::
+
+  $ cmake -DWITH_PREFIX_BIN=/usr/lib/centreon-engine .
+
+At this step, the software will check for existence and usability of the
+rerequisites. If one cannot be found, an appropriate error message will
+be printed. Otherwise an installation summary will be printed.
+
+.. note::
+  If you need to change the options you used to compile your software,
+  you might want to remove the *CMakeCache.txt* file that is in the
+  *build* directory. This will remove cache entries that might have been
+  computed during the last configuration step.
+
+Compilation
+===========
+
+Once properly configured, the compilation process is really simple ::
+
+  $ make
+
+And wait until compilation completes.
+
+************
+Installation
+************
+
+Once compiled, the following command must be run as privileged user to
+finish installation ::
+
+  $ make install
+
+And wait for its completion.

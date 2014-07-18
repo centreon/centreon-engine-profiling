@@ -1,0 +1,217 @@
+##################
+Centreon Profiling
+##################
+
+***********
+Description
+***********
+
+Centreon Profiling allow you to known information about plugin execution.
+
+*******
+License
+*******
+
+Centreon Profiling is licensed under the terms of the GNU General
+Public License Version 2 as published by the Free Software Foundation.
+See license.txt file.
+
+************
+Installation
+************
+
+To install Centreon Profiling you need to build your own version.
+See INSTALL file.
+
+*************
+Configuration
+*************
+
+No file configuration is need to use Centreon Profiling. Juste add a
+new line into the monitoring engine configuration to add the
+broker module. Centreon Profiling module takes one argument, the
+limit of stored informations by object.
+
+For Nagios engine, add something like that ::
+
+  $ broker_module=/usr/local/nagios/bin/profilingmod.so
+
+For Centreon Engine use something like that ::
+
+  $ broker_module=/usr/lib/centreon-engine/profilingmod.so
+
+*****
+Usage
+*****
+
+To control Centreon-Profiling we need to use the engine external
+command.
+
+Start profiling
+===============
+
+To start profiling we need to enable it with "_PROFILING_ENABLE". This
+external command didn't have argument and reset internal profiling
+cache.
+
+Example ::
+
+  $ NOW=$(date +%s)
+  $ EXTCMD=/usr/lib/centreon-engine/rw/centengine.cmd
+  $ /usr/bin/printf "[%lu] _PROFILING_ENABLE\n" ${NOW} > ${EXTCMD}
+
+Stop profiling
+==============
+
+To stop profiling we need to disable it with "_PROFILING_DISABLE". This
+external command didn't have argument and reset internal profiling
+cache.
+
+Example ::
+
+  $ NOW=$(date +%s)
+  $ EXTCMD=/usr/lib/centreon-engine/rw/centengine.cmd
+  $ /usr/bin/printf "[%lu] _PROFILING_DISABLE\n" ${NOW} > ${EXTCMD}
+
+Dump global informations
+========================
+
+To dump global informations we need to use "_PROFILING_SAVE_GLOBAL_STATISTICS"
+external command.
+
+========= =============================================================================
+Argument  Description
+========= =============================================================================
+Path      File path to dump informations.
+Sort      Sort methode (id, execution_time or latency).
+Filter    Filter methode (all, host, service, active, passive, command, event_handler).
+Limit     Show limit informations (0 is unlimited).
+========= =============================================================================
+
+#. Examples
+
+Show all object sorted by execution_time ::
+
+  $ NOW=$(date +%s)
+  $ PATH=/var/lib/centreon-engine/rw/global_info.log
+  $ EXTCMD=/usr/lib/centreon-engine/rw/centengine.cmd
+  $ SORT=execution_time
+  $ FILTER=all
+  $ /usr/bin/printf "[%lu] _PROFILING_SAVE_GLOBAL_STATISTICS;${PATH};${SORT};${FILTER};0\n" ${NOW} > ${EXTCMD}
+
+Show only active hosts sorted by latency ::
+
+  $ NOW=$(date +%s)
+  $ PATH=/var/lib/centreon-engine/rw/global_info.log
+  $ EXTCMD=/usr/lib/centreon-engine/rw/centengine.cmd
+  $ SORT=latency
+  $ FILTER=host,active,command,event_handler
+  $ /usr/bin/printf "[%lu] _PROFILING_SAVE_GLOBAL_STATISTICS;${PATH};${SORT};${FILTER};0\n" ${NOW} > ${EXTCMD}
+
+#. Output
+
+==================== =========================================================================
+Column               Description
+==================== =========================================================================
+date                 Dump date.
+name                 The "host_name" or "host_name::service_description".
+check_interval       The host/service check interval.
+latency              The host/service latency (min/avg/max).
+total                The host/service total execution time.
+ok/up                The host/service total execution time by STATE_OK/HOST_UP.
+warning/down         The host/service total execution time by STATE_WARNING/HOST_DOWN.
+critical/unreachable The host/service total execution time by STATE_CRITICAL/HOST_UNREACHABLE.
+unknown              The service total execution time vy STATE_UNKNOWN.
+==================== =========================================================================
+
+Dump host informations
+======================
+
+To dump host informations we need to use "_PROFILING_SAVE_HOST_STATISTICS"
+external command.
+
+========= ===============================
+Argument  Description
+========= ===============================
+Path      File path to dump informations.
+Host name The host name to dump.
+========= ===============================
+
+#. Example
+
+::
+
+  $ NOW=$(date +%s)
+  $ PATH=/var/lib/centreon-engine/rw/host_info.log
+  $ EXTCMD=/usr/lib/centreon-engine/rw/centengine.cmd
+  $ /usr/bin/printf "[%lu] _PROFILING_SAVE_HOST_STATISTICS;${PATH};localhost\n" ${NOW} > ${EXTCMD}
+
+#. Output informations
+
+==================== ===========================================================================
+Column               Description
+==================== ===========================================================================
+date                 Dump date.
+name                 The "host_name".
+check_interval       The host check interval.
+total_execution_time The total host execution time.
+total_latency        The total host latency.
+total_timeout        The total number of host check timeout.
+total_up             The total number of host check finish with up state.
+total_down           The total number of host check finish with down state.
+total_unreachable    The total number of host check finish with unreachable state.
+execution_time       The host check execution time.
+latency              The host check latency.
+is_timeout           If the host check has timeout.
+command_type         The host check command type (command, event_handler, global_event_handler).
+state                The host state (UP, DOWN, UNREACHABLE).
+check_type           The host check type (ACTIVE, PASSIVE).
+command_line         The host check command line.
+==================== ===========================================================================
+
+Dump service informations
+=========================
+
+To dump service informations we need to use "_PROFILING_SAVE_SERVICE_STATISTICS"
+external command.
+
+=================== ===============================
+Argument            Description
+=================== ===============================
+Path                File path to dump informations.
+Host name           The host name to dump.
+Service description The service description.
+=================== ===============================
+
+#. Example
+
+::
+
+  $ NOW=$(date +%s)
+  $ PATH=/var/lib/centreon-engine/rw/service_info.log
+  $ EXTCMD=/usr/lib/centreon-engine/rw/centengine.cmd
+  $ /usr/bin/printf "[%lu] _PROFILING_SAVE_SERVICE_STATISTICS;${PATH};localhost;ping\n" ${NOW} > ${EXTCMD}
+
+#. Output informations
+
+==================== ==============================================================================
+Column               Description
+==================== ==============================================================================
+date                 Dump date.
+name                 The "host_name::service_description".
+check_interval       The service check interval.
+total_execution_time The total service execution time.
+total_latency        The total service latency.
+total_timeout        The total number of service check timeout.
+total_ok             The total number of service check finish with ok state.
+total_warning        The total number of service check finish with warning state.
+total_critical       The total number of service check finish with critical state.
+total_unknown        The total number of service check finish with unknown state.
+execution_time       The service check execution time.
+latency              The service check latency.
+is_timeout           If the service check has timeout.
+command_type         The service check command type (command, event_handler, global_event_handler).
+state                The service state (OK, WARNING, CRITICAL, UNKNOWN).
+check_type           The service check type (ACTIVE, PASSIVE).
+command_line         The service check command line.
+==================== ==============================================================================
