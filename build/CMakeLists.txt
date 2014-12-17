@@ -29,8 +29,8 @@ set(SRC_DIR "${PROJECT_SOURCE_DIR}/src")
 
 # Version.
 set(PROFILING_MAJOR 1)
-set(PROFILING_MINOR 0)
-set(PROFILING_PATCH 0)
+set(PROFILING_MINOR 1)
+set(PROFILING_PATCH 1)
 set(PROFILING_VERSION "${PROFILING_MAJOR}.${PROFILING_MINOR}.${PROFILING_PATCH}")
 
 # Include module to check existing libraries.
@@ -85,7 +85,6 @@ if (WITH_CENTREON_ENGINE_INCLUDE_DIR)
   if (NOT ENGINE_HEADER_FOUND)
     message(FATAL_ERROR "Could not find Centreon Engine's headers in ${WITH_CENTREON_ENGINE_INCLUDE_DIR}.")
   endif ()
-  include_directories("${WITH_CENTREON_ENGINE_INCLUDE_DIR}")
   set(ENGINE_INCLUDE_DIR "${WITH_CENTREON_ENGINE_INCLUDE_DIR}")
 elseif (ENGINE_FOUND) # Was Centreon Engine detected with pkg-config ?
   if (CMAKE_CXX_FLAGS)
@@ -98,8 +97,9 @@ else ()
   if (NOT ENGINE_INCLUDE_DIR)
     message(FATAL_ERROR "Could not find Centreon Engine's headers (try WITH_CENTREON_ENGINE_INCLUDE_DIR).")
   endif ()
-  include_directories("${ENGINE_INCLUDE_DIR}")
 endif ()
+include_directories("${ENGINE_INCLUDE_DIR}")
+include_directories("${ENGINE_INCLUDE_DIR}/compatibility")
 
 # Generate version header.
 message(STATUS "Generating version header file.")
