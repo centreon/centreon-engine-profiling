@@ -56,9 +56,11 @@ cache.
 
 Example ::
 
-  $ NOW=$(date +%s)
-  $ EXTCMD=/var/lib/centreon-engine/rw/centengine.cmd
-  $ /usr/bin/printf "[%lu] _PROFILING_ENABLE\n" ${NOW} > ${EXTCMD}
+```
+NOW=$(date +%s)
+EXTCMD=/var/lib/centreon-engine/rw/centengine.cmd
+/usr/bin/printf "[%lu] _PROFILING_ENABLE\n" ${NOW} > ${EXTCMD}
+```
 
 Stop profiling
 ==============
@@ -82,7 +84,7 @@ external command.
 ========= =============================================================================
 Argument  Description
 ========= =============================================================================
-Path      File path to dump informations.
+Log Path  File path to dump informations.
 Sort      Sort methode (id, execution_time or latency).
 Filter    Filter methode: can be 'all' or use some filters (seperated by coma): 
           [host, service], [active, passive], [notification, command, event_handler].
@@ -94,20 +96,20 @@ Limit     Show limit informations (0 is unlimited).
 Show all object sorted by execution_time ::
 
   $ NOW=$(date +%s)
-  $ PATH=/var/lib/centreon-engine/rw/global_info.log
+  $ LOG_PATH=/var/lib/centreon-engine/rw/global_info.log
   $ EXTCMD=/var/lib/centreon-engine/rw/centengine.cmd
   $ SORT=execution_time
   $ FILTER=all
-  $ /usr/bin/printf "[%lu] _PROFILING_SAVE_GLOBAL_STATISTICS;${PATH};${SORT};${FILTER};0\n" ${NOW} > ${EXTCMD}
+  $ /usr/bin/printf "[%lu] _PROFILING_SAVE_GLOBAL_STATISTICS;${LOG_PATH};${SORT};${FILTER};0\n" ${NOW} > ${EXTCMD}
 
 Show only active hosts sorted by latency ::
 
   $ NOW=$(date +%s)
-  $ PATH=/var/lib/centreon-engine/rw/global_info.log
+  $ LOG_PATH=/var/lib/centreon-engine/rw/global_info.log
   $ EXTCMD=/var/lib/centreon-engine/rw/centengine.cmd
   $ SORT=latency
   $ FILTER=host,active,command,event_handler
-  $ /usr/bin/printf "[%lu] _PROFILING_SAVE_GLOBAL_STATISTICS;${PATH};${SORT};${FILTER};0\n" ${NOW} > ${EXTCMD}
+  $ /usr/bin/printf "[%lu] _PROFILING_SAVE_GLOBAL_STATISTICS;${LOG_PATH};${SORT};${FILTER};0\n" ${NOW} > ${EXTCMD}
 
 #. Output
 
@@ -134,7 +136,7 @@ external command.
 ========= ===============================
 Argument  Description
 ========= ===============================
-Path      File path to dump informations.
+Log Path  File path to dump informations.
 Host name The host name to dump.
 ========= ===============================
 
@@ -143,9 +145,9 @@ Host name The host name to dump.
 ::
 
   $ NOW=$(date +%s)
-  $ PATH=/var/lib/centreon-engine/rw/host_info.log
+  $ LOG_PATH=/var/lib/centreon-engine/rw/host_info.log
   $ EXTCMD=/var/lib/centreon-engine/rw/centengine.cmd
-  $ /usr/bin/printf "[%lu] _PROFILING_SAVE_HOST_STATISTICS;${PATH};localhost\n" ${NOW} > ${EXTCMD}
+  $ /usr/bin/printf "[%lu] _PROFILING_SAVE_HOST_STATISTICS;${LOG_PATH};localhost\n" ${NOW} > ${EXTCMD}
 
 #. Output informations
 
@@ -179,7 +181,7 @@ external command.
 =================== ===============================
 Argument            Description
 =================== ===============================
-Path                File path to dump informations.
+Log Path            File path to dump informations.
 Host name           The host name to dump.
 Service description The service description.
 =================== ===============================
@@ -189,9 +191,9 @@ Service description The service description.
 ::
 
   $ NOW=$(date +%s)
-  $ PATH=/var/lib/centreon-engine/rw/service_info.log
+  $ LOG_PATH=/var/lib/centreon-engine/rw/service_info.log
   $ EXTCMD=/var/lib/centreon-engine/rw/centengine.cmd
-  $ /usr/bin/printf "[%lu] _PROFILING_SAVE_SERVICE_STATISTICS;${PATH};localhost;ping\n" ${NOW} > ${EXTCMD}
+  $ /usr/bin/printf "[%lu] _PROFILING_SAVE_SERVICE_STATISTICS;${LOG_PATH};localhost;ping\n" ${NOW} > ${EXTCMD}
 
 #. Output informations
 
