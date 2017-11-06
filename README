@@ -56,9 +56,11 @@ cache.
 
 Example ::
 
-  $ NOW=$(date +%s)
-  $ EXTCMD=/var/lib/centreon-engine/rw/centengine.cmd
-  $ /usr/bin/printf "[%lu] _PROFILING_ENABLE\n" ${NOW} > ${EXTCMD}
+```
+NOW=$(date +%s)
+EXTCMD=/var/lib/centreon-engine/rw/centengine.cmd
+/usr/bin/printf "[%lu] _PROFILING_ENABLE\n" ${NOW} > ${EXTCMD}
+```
 
 Stop profiling
 ==============
